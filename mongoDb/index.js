@@ -12,4 +12,4 @@ mongoose.connect(DB_URL, err => {
         console.log("数据库连接成功！")
     }
 })
-export default mongoose
+export default mongoose 
