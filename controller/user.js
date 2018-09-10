@@ -3,7 +3,7 @@ import conf from '../config'
 import userModel from '../mongoDb/models/user'
 module.exports = {
     async login (ctx, next) {
-        console.log('----------------登录接口 user/login-----------------------');
+		console.log('----------------登录接口 user/login-----------------------');
         let {username, pwd} = ctx.request.body;
         try {
             let data = await ctx.findOne(userModel, {username: username});
@@ -15,7 +15,7 @@ module.exports = {
             if (pwd !== data.pwd) {
                 return ctx.sendError('密码错误,请重新输入！');
             }
-            await ctx.update(userModel, {_id: data._id}, {$set:{loginTime: new Date()}}) //更新登陆时间
+            await ctx.update(userModel, {_id: data._id}, {$set:{logintime: ctx.formatDate(new Date())}}) //更新登陆时间
 
             let payload = {
                 _id: data._id,
