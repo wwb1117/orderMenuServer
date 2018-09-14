@@ -27,7 +27,8 @@
     "koa-views": "^5.2.1",
     "log4js": "^3.0.5",
     "mongoose": "^5.2.12",
-    "pug": "^2.0.0-rc.1"
+    "pug": "^2.0.0-rc.1",
+    "request": "^2.88.0"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
