@@ -8,7 +8,8 @@ export default () => {
                 msg: msg || 'success'
             });
         }
-    }
+	}
+	
     let renderError = ctx => {
         return msg => {
             ctx.set("Content-Type", "application/json");
@@ -18,7 +19,8 @@ export default () => {
                 msg: msg.toString()
             });
         }
-    }
+	}
+	
     return async (ctx, next) => {
         ctx.send = render(ctx);
         ctx.sendError = renderError(ctx);
