@@ -1,3 +1,6 @@
+
+import ip from 'ip'
+import conf from '../config'
 export default {
 	async getAccessToken(ctx, next){
 		try {
@@ -25,8 +28,10 @@ export default {
 			let token = await ctx.getAccessToken()
 
 			for (var i = 0; i < deskNum; i++) {
-				let itemdata = await  ctx.wx_getWXACode(token, i+1)
-				dataArr.push({index: i+1, codeData: itemdata})
+				let index = i+1
+				await  ctx.wx_getWXACode(token, index)
+
+				dataArr.push({index: i+1, codeUrl: `http://${ip.address()}:${conf.port}/code/imgcode${index}.jpg`})
 			}
 
 			ctx.send({

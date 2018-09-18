@@ -38,7 +38,7 @@ export default app => {
     app.use(bodyParser())
     
     //静态文件中间件
-    app.use(staticFiles(path.resolve(__dirname, '../../public')));
+    app.use(staticFiles(path.resolve(__dirname, '../public'))); //相对于当前运行文件的路径
 
     // 规则中间件
     // Rule({

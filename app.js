@@ -9,6 +9,10 @@ const app = new Koa()
 
 middleware(app)
 router(app)
+
+app.on('error', function(err,ctx){
+    console.log(err);
+});
 app.listen(conf.port, '0.0.0.0', () => {
     console.log(`server is running at http://${ip.address()}:${conf.port}`)
 })

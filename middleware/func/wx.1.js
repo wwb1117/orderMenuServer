@@ -1,8 +1,6 @@
 var https = require('https');
-var http = require("http");
-var fs = require("fs");
 // var querystring = require('querystring');
-// var request = require('request');
+var request = require('request');
 
 export const getAccessToken = () => {
 	return new Promise((resolve, reject) => {
@@ -24,40 +22,28 @@ export const getAccessToken = () => {
 }
 export const wx_getWXACode = (token, index) => {
 	return new Promise((resolve, reject) => {
-		var postData = {
+		const postData = {
 			'scene': index,
 			'page': '',
 			'width': 200,
 			'auto_color': false
 		};
-		postData = JSON.stringify(postData)
-		var options = {
-			method: "POST",
-			host: "api.weixin.qq.com",
-			path: "/wxa/getwxacodeunlimit?access_token=" + token,
-			headers: {
-				"Content-Type": "application/json",
-				"Content-Length": postData.length
-			}
-		};
 
-		var req = http.request(options, function (res) {
-			res.setEncoding("binary");
-			var imgData = "";
-			res.on('data', function (chunk) {
-				imgData += chunk;
-			});
-			res.on("end", function () {
-				fs.writeFile('./public/code/imgcode'+ index +'.jpg', imgData, "binary", function (err) {
-					if (err) {
-						reject(err)
-					}
-					resolve(imgData)
-				});
-			});
+		request({
+			url: 'https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token='+token,
+			method: "POST",
+			json: true,
+			headers: {
+				"content-type": "application/json",
+			},
+			body: postData
+		}, function(error, response, body) {
+			if (!error && response.statusCode == 200) {
+				resolve(body)
+			} else {
+				reject(error)
+			}
 		});
-		req.write(postData);
-		req.end();
 		
 	});
 }
