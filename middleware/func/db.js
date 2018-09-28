@@ -53,13 +53,13 @@ export const update = (model, conditions, update, options) => {
 
 export const remove = (model, conditions) => {
     return new Promise((resolve, reject) => {
-        model.remove(conditions, function (err, res) {
+        model.deleteOne(conditions, function (err, res) {
             if (err) {
                 console.error('Error: ' + JSON.stringify(err));
                 reject(err);
                 return false;
             } else {
-                if (res.result.n != 0) {
+                if (res.n != 0) {
                     console.log('remove success!');
                 } else {
                     console.log('remove fail:no this data!');
@@ -144,7 +144,7 @@ export const findPage = async (model, conditions, fields, options = {}) => {
     
     const getCount = () => {
         return new Promise((resolve, reject) => {
-            model.find(conditions, fields).count({}, (err, res) => {
+            model.find(conditions, fields).countDocuments({}, (err, res) => {
                 if (err) {
                     console.log('查询长度错误')
                     return reject(err);
