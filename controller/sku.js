@@ -8,6 +8,15 @@ module.exports = {
 		
         try {
 			let data = await ctx.findOne(skuModel, {skuName: paramsData.skuName})
+
+			let countData = await ctx.findOne(countModel, {fieldName: 'skuModel'})
+			let countId = 0
+
+			if (countId) {
+				countId = countData.fieldId
+			}
+
+			console.log(countId)
 			
             if (data) {
                 ctx.sendError('规格名已存在, 请重新添加!')
