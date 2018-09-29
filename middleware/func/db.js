@@ -183,6 +183,16 @@ export const findPage = async (model, conditions, fields, options = {}) => {
     })
 }
 
-
+export const modelTotal = async (model) => {
+	return new Promise((resolve, reject) => {
+		model.find().countDocuments({}, (err, res) => {
+			if (err) {
+				console.log('自增ID获取失败')
+				return reject(err);
+			}
+			resolve(res)
+		})
+	})
+}
 
 

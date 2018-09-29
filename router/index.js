@@ -2,6 +2,7 @@ import koaRouter from 'koa-router'
 import user from '../controller/user'
 import wx from '../controller/wx'
 import cate from '../controller/category'
+import sku from '../controller/sku'
 
 const router = koaRouter()
 
@@ -18,6 +19,9 @@ export default app => {
 	router.get('/api/category/list', cate.getList)
 	router.delete('/api/category/delete', cate.remove)
 	router.put('/api/category/update', cate.update)
+	//商品规格
+	router.post('/api/sku/add', sku.add)
+	router.get('/api/sku/list', sku.getList)
 
     app.use(router.routes()).use(router.allowedMethods());
 }
