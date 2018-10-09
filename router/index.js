@@ -5,6 +5,7 @@ import cate from '../controller/category'
 import sku from '../controller/sku'
 import up from '../controller/upload'
 import good from '../controller/good'
+import order from '../controller/order'
 
 const multer = require('koa-multer');
 
@@ -52,6 +53,9 @@ export default app => {
 	router.delete('/api/good/delete', good.remove)
 	//图片上传
 	router.post('/api/f/upload', upload.single('file'), up.imgUpload)
+
+	//小程序接口
+	router.get('/api/order/menu', order.getMenuList)
 
     app.use(router.routes()).use(router.allowedMethods());
 }
