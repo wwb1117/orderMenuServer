@@ -56,7 +56,7 @@ module.exports = {
 
 	},
 	async remove (ctx, next) {
-		console.log('----------------删除规格 category/delete-----------------------');
+		console.log('----------------删除规格 sku/delete-----------------------');
 		let id = ctx.request.query.id
 		
         try {
@@ -68,7 +68,7 @@ module.exports = {
 	},
 	
 	async update (ctx, next) {
-        console.log('----------------更新规格 category/update-----------------------');
+        console.log('----------------更新规格 sku/update-----------------------');
 		let paramsData = ctx.request.body;
         try {
             let data = await ctx.findOne(skuModel, {_id: paramsData._id}) 

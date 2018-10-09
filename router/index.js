@@ -4,6 +4,7 @@ import wx from '../controller/wx'
 import cate from '../controller/category'
 import sku from '../controller/sku'
 import up from '../controller/upload'
+import good from '../controller/good'
 
 const multer = require('koa-multer');
 
@@ -41,7 +42,14 @@ export default app => {
 	router.put('/api/category/update', cate.update)
 	//商品规格
 	router.post('/api/sku/add', sku.add)
+	router.put('/api/sku/update', sku.update)
+	router.delete('/api/sku/delete', sku.remove)
 	router.get('/api/sku/list', sku.getList)
+	//商品
+	router.post('/api/good/add', good.add)
+	router.get('/api/good/list', good.getList)
+	router.put('/api/good/update', good.update)
+	router.delete('/api/good/delete', good.remove)
 	//图片上传
 	router.post('/api/f/upload', upload.single('file'), up.imgUpload)
 
