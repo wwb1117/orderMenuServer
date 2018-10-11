@@ -28,7 +28,7 @@ export const add = (model, conditions) => {
  */
 export const update = (model, conditions, update, options) => {
     return new Promise((resolve, reject) => {
-        model.update(conditions, update, options, (err, res) => {
+        model.updateOne(conditions, update, options, (err, res) => {
             if (err) {
                 console.error('Error: ' + JSON.stringify(err));
                 reject(err);

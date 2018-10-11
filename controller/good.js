@@ -16,6 +16,41 @@ module.exports = {
 			ctx.sendError(e)
         }
 	},
+	async makePrice (ctx, next) {
+		console.log('----------------商品报价 good/makePrice-----------------------');
+		
+		let {goodId, sizeSkuId, cookSkuId, price} = ctx.request.body;
+
+        try {
+			let data = await ctx.findOne(goodModel, {_id: goodId})
+			
+			let priceArr = data.skuPrice
+			let currentindex = null
+
+			if (priceArr && priceArr.length > 0) {
+				priceArr.forEach((item, index) => {
+					if (item.sizeSkuId == sizeSkuId) {
+						currentindex = index
+					}
+				});
+			}
+
+			if (currentindex !== null) {
+				priceArr[currentindex] = {sizeSkuId: sizeSkuId, cookSkuId: cookSkuId, price: price}
+			} else {
+				priceArr.push({sizeSkuId: sizeSkuId, cookSkuId: cookSkuId, price: price})
+			}
+
+			data.skuPrice = priceArr
+
+			await ctx.update(goodModel, {_id: goodId}, data)
+			
+			ctx.send({message: '报价成功'})
+            
+        }catch(e) {
+			ctx.sendError(e)
+        }
+	},
 	async getList(ctx, next){
 		console.log('----------------获取商品列表 good/list-----------------------');
 		let {goodName, pageNo = 1, pageSize = 15} = ctx.request.query

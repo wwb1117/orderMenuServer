@@ -6,6 +6,7 @@ let goodSchema = db.Schema({
 	lowPrice: String,
 	img: String,
 	sizeSku: Array,
+	skuPrice: Array,
 	cookSku: Array
 })
 export default db.model('good', goodSchema);

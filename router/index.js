@@ -49,6 +49,7 @@ export default app => {
 	//商品
 	router.post('/api/good/add', good.add)
 	router.get('/api/good/list', good.getList)
+	router.post('/api/good/makePrice', good.makePrice)
 	router.put('/api/good/update', good.update)
 	router.delete('/api/good/delete', good.remove)
 	//图片上传
@@ -56,6 +57,8 @@ export default app => {
 
 	//小程序接口
 	router.get('/api/order/menu', order.getMenuList)
+	router.get('/api/order/good', order.getGoodDetail)
+	router.post('/api/order/addgoodToOrder', order.addGoodToOrder)
 
     app.use(router.routes()).use(router.allowedMethods());
 }

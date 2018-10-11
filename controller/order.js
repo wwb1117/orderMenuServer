@@ -1,5 +1,7 @@
 import categoryModel from '../mongoDb/models/category'
 import goodModel from '../mongoDb/models/good'
+import skuModel from '../mongoDb/models/sku'
+import deskOrderModel from '../mongoDb/models/deskOrder'
 
 module.exports = {
     async getMenuList (ctx, next) {
@@ -38,6 +40,92 @@ module.exports = {
 			}
 
 			ctx.send(resArr)
+		} catch (e) {
+            ctx.sendError(e)
+		}
+	},
+
+	async addGoodToOrder (ctx, next){
+
+		console.log('----------------添加商品到订单 order/addGoodToOrder-----------------------')
+
+		let paramobj = ctx.request.body;
+		let {deskNo, goodId, goodName, goodCount, goodUnitPrice, goodTotalPrice, sizeSkuId, sizeSkuName, cookSkuId, cookSkuName} = paramobj;
+
+		try {
+			let data = await ctx.findOne(deskOrderModel, {deskNo: deskNo})
+
+			console.log(data)
+
+			if (data === null) {
+				let resobj = {
+					deskNo: deskNo,
+					orderMony: goodTotalPrice,
+					goodCount: goodCount,
+					goodList: [paramobj]
+				}
+
+				let data = await ctx.add(deskOrderModel, resobj)
+
+				console.log(data)
+			} else {
+				let resobj = {
+					deskNo: deskNo,
+					orderMony: goodTotalPrice,
+					goodCount: goodCount,
+					goodList: [paramobj]
+				}
+			}
+		} catch (error) {
+			ctx.sendError(error)
+		}
+
+		
+
+
+	},
+
+	async getGoodDetail (ctx, next) {
+		console.log('----------------获取商品详情 order/good-----------------------');
+		
+		let {goodId} = ctx.request.query;
+
+		try {
+			let data = await ctx.findOne(goodModel, {_id: goodId})
+
+			let sizeSkuResArr = []
+			let cookSkuResArr = []
+
+			if (data.skuPrice) {
+				for (let item of data.skuPrice) {
+					let sizeskuItem = {}
+					sizeskuItem.sizeSkuId = item.sizeSkuId
+					let sizeSkudata = await ctx.findOne(skuModel, {_id: item.sizeSkuId})
+
+					sizeskuItem.skuName = sizeSkudata.skuName
+					sizeskuItem.price = item.price
+					sizeSkuResArr.push(sizeskuItem)
+				}
+			}
+
+			if (data.cookSku) {
+				for (let item of data.cookSku) {
+					let cookskuItem = {}
+					cookskuItem.cookSkuId = item
+					let cookSkudata = await ctx.findOne(skuModel, {_id: item})
+					
+					cookskuItem.skuName = cookSkudata.skuName
+					cookSkuResArr.push(cookskuItem)
+				}
+			}
+
+			let resData = JSON.parse(JSON.stringify(data))
+
+			resData.sizeSkuList = sizeSkuResArr
+			resData.cookSkuList = cookSkuResArr
+
+			ctx.send(resData)
+			
 		} catch (e) {
             ctx.sendError(e)
 		}
