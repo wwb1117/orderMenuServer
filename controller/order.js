@@ -55,8 +55,6 @@ module.exports = {
 		try {
 			let data = await ctx.findOne(deskOrderModel, {deskNo: deskNo})
 
-			console.log(data)
-
 			if (data === null) {
 				let resobj = {
 					deskNo: deskNo,
@@ -65,23 +63,22 @@ module.exports = {
 					goodList: [paramobj]
 				}
 
-				let data = await ctx.add(deskOrderModel, resobj)
-
-				console.log(data)
+				await ctx.add(deskOrderModel, resobj)
 			} else {
-				let resobj = {
-					deskNo: deskNo,
-					orderMony: goodTotalPrice,
-					goodCount: goodCount,
-					goodList: [paramobj]
-				}
+				let resobj = {deskNo: deskNo}
+				resobj.orderMony = data.orderMony + goodTotalPrice
+				resobj.goodCount = data.goodCount + goodTotalPrice
+				resobj.goodList = data.goodList
+
+				resobj.goodList.push(paramobj)
+
+				await ctx.add(deskOrderModel, resobj)
 			}
+
+			ctx.send({message: '商品已加入订单'})
 		} catch (error) {
 			ctx.sendError(error)
 		}
-
-		
-
 
 	},
 
