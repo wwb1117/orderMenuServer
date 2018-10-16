@@ -44,7 +44,19 @@ module.exports = {
             ctx.sendError(e)
 		}
 	},
+	async getShopList (ctx, next){
+		console.log('----------------获取购物车商品列表 order/getShopList-----------------------')
+		let {deskNo} = ctx.request.query
 
+		try {
+			let data = await ctx.findOne(deskOrderModel, {deskNo: deskNo})
+			ctx.send(data)
+		} catch (error) {
+			ctx.sendError(error)
+		}
+
+
+	},
 	async addGoodToOrder (ctx, next){
 
 		console.log('----------------添加商品到订单 order/addGoodToOrder-----------------------')
@@ -58,21 +70,21 @@ module.exports = {
 			if (data === null) {
 				let resobj = {
 					deskNo: deskNo,
-					orderMony: goodTotalPrice,
-					goodCount: goodCount,
+					orderMony: Number(goodTotalPrice),
+					goodCount: Number(goodCount),
 					goodList: [paramobj]
 				}
 
 				await ctx.add(deskOrderModel, resobj)
 			} else {
 				let resobj = {deskNo: deskNo}
-				resobj.orderMony = data.orderMony + goodTotalPrice
-				resobj.goodCount = data.goodCount + goodTotalPrice
+				resobj.orderMony = Number(data.orderMony) + Number(goodTotalPrice)
+				resobj.goodCount = Number(data.goodCount) + Number(goodCount)
 				resobj.goodList = data.goodList
 
 				resobj.goodList.push(paramobj)
 
-				await ctx.add(deskOrderModel, resobj)
+				await ctx.update(deskOrderModel, {deskNo: deskNo}, resobj)
 			}
 
 			ctx.send({message: '商品已加入订单'})
