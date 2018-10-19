@@ -57,12 +57,58 @@ module.exports = {
 
 
 	},
+	async shopListChange(ctx, next){
+		console.log('----------------购物车商品增减 order/shopListChange-----------------------')
+		let paramobj = ctx.request.body;
+		let {deskNo, goodId, goodCount, index} = paramobj
+
+		try {
+			let data = await ctx.findOne(deskOrderModel, {deskNo: deskNo})
+			let newData = JSON.parse(JSON.stringify(data))
+			let goodlist = JSON.parse(JSON.stringify(newData.goodList))
+
+			let currentIndex = index
+			let currentobj = null
+
+
+			currentobj = JSON.parse(JSON.stringify(goodlist[currentIndex]))
+			if (goodCount == 0) {
+				newData.orderMony = newData.orderMony - goodlist[currentIndex].goodTotalPrice
+				newData.goodCount = newData.goodCount - goodlist[currentIndex].goodCount
+				goodlist.splice(currentIndex, 1)
+			} else {
+				newData.orderMony = newData.orderMony - goodlist[currentIndex].goodTotalPrice
+				newData.goodCount = newData.goodCount + (goodCount - goodlist[currentIndex].goodCount)
+				goodlist[currentIndex] = null
+
+				currentobj.goodCount = goodCount
+				currentobj.goodTotalPrice = goodCount * currentobj.goodUnitPrice
+				newData.orderMony = newData.orderMony + currentobj.goodTotalPrice
+
+				goodlist[currentIndex] = currentobj
+
+			}
+
+			newData.goodList = goodlist
+
+			await ctx.update(deskOrderModel, {deskNo: deskNo}, newData)
+
+			ctx.send({message: '修改成功'})
+			
+		} catch (error) {
+			ctx.sendError(error)
+		}
+	},
 	async addGoodToOrder (ctx, next){
 
 		console.log('----------------添加商品到订单 order/addGoodToOrder-----------------------')
 
 		let paramobj = ctx.request.body;
 		let {deskNo, goodId, goodName, goodCount, goodUnitPrice, goodTotalPrice, sizeSkuId, sizeSkuName, cookSkuId, cookSkuName} = paramobj;
+
+		paramobj.goodUnitPrice = Number(paramobj.goodUnitPrice)
+		paramobj.goodTotalPrice = Number(paramobj.goodTotalPrice)
+		paramobj.goodCount = Number(paramobj.goodCount)
 
 		try {
 			let data = await ctx.findOne(deskOrderModel, {deskNo: deskNo})

@@ -60,6 +60,7 @@ export default app => {
 	router.get('/api/order/shopList', order.getShopList)
 	router.get('/api/order/good', order.getGoodDetail)
 	router.post('/api/order/addgoodToOrder', order.addGoodToOrder)
+	router.put('/api/order/shopList/change', order.shopListChange)
 
     app.use(router.routes()).use(router.allowedMethods());
 }
