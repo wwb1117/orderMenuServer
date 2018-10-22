@@ -1,6 +1,7 @@
 import Koa from 'koa'
 // import ip from 'ip'
 const https = require('https')
+const fs = require('fs')
 const enforceHttps = require('koa-sslify')
 // import conf from './config'
 import router from './router'
