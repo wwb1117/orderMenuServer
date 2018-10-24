@@ -59,7 +59,7 @@ module.exports = {
 	},
 	async searchGood (ctx, next){
 		console.log('----------------搜索商品 order/search/good-----------------------')
-		
+
 		let {goodName} = ctx.request.query
 
 		try {
@@ -93,17 +93,17 @@ module.exports = {
 
 			currentobj = JSON.parse(JSON.stringify(goodlist[currentIndex]))
 			if (goodCount == 0) {
-				newData.orderMony = newData.orderMony - goodlist[currentIndex].goodTotalPrice
+				newData.orderMoney = newData.orderMoney - goodlist[currentIndex].goodTotalPrice
 				newData.goodCount = newData.goodCount - goodlist[currentIndex].goodCount
 				goodlist.splice(currentIndex, 1)
 			} else {
-				newData.orderMony = newData.orderMony - goodlist[currentIndex].goodTotalPrice
+				newData.orderMoney = newData.orderMoney - goodlist[currentIndex].goodTotalPrice
 				newData.goodCount = newData.goodCount + (goodCount - goodlist[currentIndex].goodCount)
 				goodlist[currentIndex] = null
 
 				currentobj.goodCount = goodCount
 				currentobj.goodTotalPrice = goodCount * currentobj.goodUnitPrice
-				newData.orderMony = newData.orderMony + currentobj.goodTotalPrice
+				newData.orderMoney = newData.orderMoney + currentobj.goodTotalPrice
 
 				goodlist[currentIndex] = currentobj
 
@@ -136,7 +136,7 @@ module.exports = {
 			if (data === null) {
 				let resobj = {
 					deskNo: deskNo,
-					orderMony: Number(goodTotalPrice),
+					orderMoney: Number(goodTotalPrice),
 					goodCount: Number(goodCount),
 					goodList: [paramobj]
 				}
@@ -144,7 +144,7 @@ module.exports = {
 				await ctx.add(deskOrderModel, resobj)
 			} else {
 				let resobj = {deskNo: deskNo}
-				resobj.orderMony = Number(data.orderMony) + Number(goodTotalPrice)
+				resobj.orderMoney = Number(data.orderMoney) + Number(goodTotalPrice)
 				resobj.goodCount = Number(data.goodCount) + Number(goodCount)
 				resobj.goodList = data.goodList
 
