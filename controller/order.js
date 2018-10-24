@@ -57,6 +57,26 @@ module.exports = {
 
 
 	},
+	async searchGood (ctx, next){
+		console.log('----------------搜索商品 order/search/good-----------------------')
+		
+		let {goodName} = ctx.request.query
+
+		try {
+			let reg1 = new RegExp(goodName, 'i')
+
+			let data = await ctx.findPage(goodModel, {
+                $or: [
+                    {goodName: { $regex: reg1}}
+                ]
+            }, {}, {limit: 10, skip: 0})
+
+			ctx.send(data)
+		} catch (e) {
+            ctx.sendError(e)
+		}
+
+	},
 	async shopListChange(ctx, next){
 		console.log('----------------购物车商品增减 order/shopListChange-----------------------')
 		let paramobj = ctx.request.body;

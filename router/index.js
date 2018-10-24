@@ -57,6 +57,7 @@ export default app => {
 
 	//小程序接口
 	router.get('/api/order/menu', order.getMenuList)
+	router.get('/api/order/search/good', order.searchGood)
 	router.get('/api/order/shopList', order.getShopList)
 	router.get('/api/order/good', order.getGoodDetail)
 	router.post('/api/order/addgoodToOrder', order.addGoodToOrder)
