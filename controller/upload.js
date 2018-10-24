@@ -6,6 +6,6 @@ export default {
 	async imgUpload(ctx, next){
 		var imgname = ctx.req.file.filename
 
-		ctx.send({url: `http://${ip.address()}:${conf.port}/images/${imgname}`})
+		ctx.send({url: `http://www.wangwenbei.cn/images/${imgname}`})
 	}
 }
