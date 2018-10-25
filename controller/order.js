@@ -2,6 +2,7 @@ import categoryModel from '../mongoDb/models/category'
 import goodModel from '../mongoDb/models/good'
 import skuModel from '../mongoDb/models/sku'
 import deskOrderModel from '../mongoDb/models/deskOrder'
+import * as math from 'mathjs'
 
 module.exports = {
     async getMenuList (ctx, next) {
@@ -93,17 +94,24 @@ module.exports = {
 
 			currentobj = JSON.parse(JSON.stringify(goodlist[currentIndex]))
 			if (goodCount == 0) {
-				newData.orderMoney = newData.orderMoney - goodlist[currentIndex].goodTotalPrice
-				newData.goodCount = newData.goodCount - goodlist[currentIndex].goodCount
+				// newData.orderMoney = newData.orderMoney - goodlist[currentIndex].goodTotalPrice
+				newData.orderMoney = math.eval(`${newData.orderMoney} - ${goodlist[currentIndex].goodTotalPrice}`)
+
+				// newData.goodCount = newData.goodCount - goodlist[currentIndex].goodCount
+				newData.goodCount = math.eval(`${newData.goodCount} - ${goodlist[currentIndex].goodCount}`)
 				goodlist.splice(currentIndex, 1)
 			} else {
-				newData.orderMoney = newData.orderMoney - goodlist[currentIndex].goodTotalPrice
-				newData.goodCount = newData.goodCount + (goodCount - goodlist[currentIndex].goodCount)
+				// newData.orderMoney = newData.orderMoney - goodlist[currentIndex].goodTotalPrice
+				newData.orderMoney = math.eval(`${newData.orderMoney} - ${goodlist[currentIndex].goodTotalPrice}`)
+				// newData.goodCount = newData.goodCount + (goodCount - goodlist[currentIndex].goodCount)
+				newData.goodCount = math.eval(`${newData.goodCount} + (${goodCount} - ${goodlist[currentIndex].goodCount})`)
 				goodlist[currentIndex] = null
 
 				currentobj.goodCount = goodCount
-				currentobj.goodTotalPrice = goodCount * currentobj.goodUnitPrice
-				newData.orderMoney = newData.orderMoney + currentobj.goodTotalPrice
+				// currentobj.goodTotalPrice = goodCount * currentobj.goodUnitPrice
+				currentobj.goodTotalPrice = math.eval(`${goodCount} * ${currentobj.goodUnitPrice}`)
+				// newData.orderMoney = newData.orderMoney + currentobj.goodTotalPrice
+				newData.orderMoney = math.eval(`${newData.orderMoney} + ${currentobj.goodTotalPrice}`)
 
 				goodlist[currentIndex] = currentobj
 
@@ -144,8 +152,10 @@ module.exports = {
 				await ctx.add(deskOrderModel, resobj)
 			} else {
 				let resobj = {deskNo: deskNo}
-				resobj.orderMoney = Number(data.orderMoney) + Number(goodTotalPrice)
-				resobj.goodCount = Number(data.goodCount) + Number(goodCount)
+				// resobj.orderMoney = Number(data.orderMoney) + Number(goodTotalPrice)
+				resobj.orderMoney = math.eval(`${data.orderMoney} + ${goodTotalPrice}`)
+				// resobj.goodCount = Number(data.goodCount) + Number(goodCount)
+				resobj.goodCount = math.eval(`${data.goodCount} + ${goodCount}`)
 				resobj.goodList = data.goodList
 
 				resobj.goodList.push(paramobj)
