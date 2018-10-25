@@ -4,6 +4,11 @@ import skuModel from '../mongoDb/models/sku'
 import deskOrderModel from '../mongoDb/models/deskOrder'
 import * as math from 'mathjs'
 
+math.config({
+	number: 'BigNumber',
+	precision: 20
+})
+
 module.exports = {
     async getMenuList (ctx, next) {
 		console.log('----------------获取菜单 order/menu-----------------------');
@@ -89,10 +94,8 @@ module.exports = {
 			let goodlist = JSON.parse(JSON.stringify(newData.goodList))
 
 			let currentIndex = index
-			let currentobj = null
+			let currentobj = JSON.parse(JSON.stringify(goodlist[currentIndex]))
 
-
-			currentobj = JSON.parse(JSON.stringify(goodlist[currentIndex]))
 			if (goodCount == 0) {
 				// newData.orderMoney = newData.orderMoney - goodlist[currentIndex].goodTotalPrice
 				newData.orderMoney = math.eval(`${newData.orderMoney} - ${goodlist[currentIndex].goodTotalPrice}`)
@@ -102,17 +105,24 @@ module.exports = {
 				goodlist.splice(currentIndex, 1)
 			} else {
 				// newData.orderMoney = newData.orderMoney - goodlist[currentIndex].goodTotalPrice
-				newData.orderMoney = math.eval(`${newData.orderMoney} - ${goodlist[currentIndex].goodTotalPrice}`)
 				// newData.goodCount = newData.goodCount + (goodCount - goodlist[currentIndex].goodCount)
+				//先从订单里面把这条商品的所有价钱都删掉,重新添加
+
+				newData.orderMoney = math.eval(`${newData.orderMoney} - ${goodlist[currentIndex].goodTotalPrice}`)
+
 				newData.goodCount = math.eval(`${newData.goodCount} + (${goodCount} - ${goodlist[currentIndex].goodCount})`)
+				
 				goodlist[currentIndex] = null
-
 				currentobj.goodCount = goodCount
-				// currentobj.goodTotalPrice = goodCount * currentobj.goodUnitPrice
-				currentobj.goodTotalPrice = math.eval(`${goodCount} * ${currentobj.goodUnitPrice}`)
-				// newData.orderMoney = newData.orderMoney + currentobj.goodTotalPrice
-				newData.orderMoney = math.eval(`${newData.orderMoney} + ${currentobj.goodTotalPrice}`)
 
+				// currentobj.goodTotalPrice = goodCount * currentobj.goodUnitPrice
+				// newData.orderMoney = newData.orderMoney + currentobj.goodTotalPrice
+
+				currentobj.goodTotalPrice = math.eval(`${goodCount} * ${currentobj.goodUnitPrice}`)
+
+				//订单重新添加商品的价格
+
+				newData.orderMoney = math.eval(`${newData.orderMoney} + ${currentobj.goodTotalPrice}`)
 				goodlist[currentIndex] = currentobj
 
 			}
