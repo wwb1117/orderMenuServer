@@ -142,10 +142,12 @@ module.exports = {
 		console.log('----------------添加商品到订单 order/addGoodToOrder-----------------------')
 
 		let paramobj = ctx.request.body;
-		let {deskNo, goodId, goodName, goodCount, goodUnitPrice, goodTotalPrice, sizeSkuId, sizeSkuName, cookSkuId, cookSkuName} = paramobj;
+		let {deskNo, goodId, goodName, goodCount, goodUnitPrice, sizeSkuId, sizeSkuName, cookSkuId, cookSkuName} = paramobj;
+
+		let goodTotalPrice = math.eval(`${goodCount} * ${goodUnitPrice}`)
 
 		paramobj.goodUnitPrice = Number(paramobj.goodUnitPrice)
-		paramobj.goodTotalPrice = Number(paramobj.goodTotalPrice)
+		paramobj.goodTotalPrice = math.eval(`${goodCount} * ${goodUnitPrice}`)
 		paramobj.goodCount = Number(paramobj.goodCount)
 
 		try {
@@ -154,7 +156,7 @@ module.exports = {
 			if (data === null) {
 				let resobj = {
 					deskNo: deskNo,
-					orderMoney: Number(goodTotalPrice),
+					orderMoney: math.eval(`${goodCount} * ${goodUnitPrice}`),
 					goodCount: Number(goodCount),
 					goodList: [paramobj]
 				}
