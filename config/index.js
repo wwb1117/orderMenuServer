@@ -12,12 +12,18 @@ const log = {
     projectName: 'menu', // 项目名，记录在日志中的项目信息
     ip: '0.0.0.0' // 默认情况下服务器 ip 地址
 }
+const server = {
+	host: '47.92.4.135',
+	domain: 'https://order.wangwenbei.cn'
+}
+
 const port = '3040'
 
 export default {
     env: process.env.NODE_ENV,
     port,
-    auth,
+	auth,
+	server,
     log,
     mongodb: {
         username: 'wwb',
