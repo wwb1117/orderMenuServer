@@ -3,7 +3,7 @@ import ip from 'ip'
 import conf from './config'
 import router from './router'
 import middleware from './middleware'
-import './mongodb'
+import './mongoDb'
 
 const app = new Koa()
 
