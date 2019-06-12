@@ -5,6 +5,11 @@ const auth = {
     whiteList: ['login', 'client_api'],
     blackList: ['admin_api']
 }
+const wx = {
+	wxappid: 'wx2e4f118e527bcf44',
+	mch_id: '1517731521',
+	wxpaykey: 'wwb'
+}
 
 const log = {
     logLevel: 'debug', // 指定记录的日志级别

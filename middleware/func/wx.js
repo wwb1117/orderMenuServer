@@ -61,3 +61,21 @@ export const wx_getWXACode = (token, index) => {
 		
 	});
 }
+export const wx_getUserInfo = (code) => {
+	return new Promise((resolve, reject) => {
+		https.get('https://api.weixin.qq.com/sns/jscode2session?appid=wx2e4f118e527bcf44&secret=615c46da0cafbbd146972b9c662f5ee0&js_code='+code+'&grant_type=authorization_code', function (req, res) {
+			var html = '';
+
+			req.on('data', function (data) {
+				html += data;
+			});
+
+			req.on('end', function () {
+				resolve(JSON.parse(html))
+			});
+		}).on('error', (e) => {
+			reject(e)
+			console.error(`错误: ${e.message}`);
+		})
+	});
+}

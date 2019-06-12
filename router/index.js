@@ -60,7 +60,10 @@ export default app => {
 	router.get('/api/order/search/good', order.searchGood)
 	router.get('/api/order/shopList', order.getShopList)
 	router.get('/api/order/good', order.getGoodDetail)
+	router.get('/api/order/getUserInfo', wx.getWXuserInfo)
+	router.get('/api/order/payResNotify', wx.payResNotify)
 	router.post('/api/order/addgoodToOrder', order.addGoodToOrder)
+	router.post('/api/order/pay', wx.toWxPay)
 	router.put('/api/order/shopList/change', order.shopListChange)
 
     app.use(router.routes()).use(router.allowedMethods());

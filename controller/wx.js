@@ -1,6 +1,7 @@
 
 import ip from 'ip'
 import conf from '../config'
+import WechatAppletPay from './pay'
 export default {
 	async getAccessToken(ctx, next){
 		try {
@@ -8,6 +9,51 @@ export default {
 
 			ctx.send({
 				accessToken: JSON.parse(data).access_token
+			})
+		} catch (error) {
+			ctx.throw(error);
+            ctx.sendError(error)
+		}
+		
+	},
+	async getWXuserInfo(ctx, next){
+		console.log('----------------小程序用户信息 order/getUserInfo-----------------------');
+		try {
+			let {code} = ctx.request.query
+			let data = await  ctx.wx_getUserInfo(code)
+
+			ctx.send({
+				userInfo: data
+			})
+		} catch (error) {
+			ctx.throw(error);
+            ctx.sendError(error)
+		}
+		
+	},
+	async toWxPay(ctx, next){
+		console.log('----------------小程序微信支付 order/pay-----------------------');
+		try {
+			let paramData = ctx.request.body;
+
+			let WechatAppletPay= new WechatAppletPay(paramData.userInfo)
+
+			WechatAppletPay.getBrandWCPayParams(paramData.orderInfo, function (data) {
+				console.log(data);
+			})
+		} catch (error) {
+			ctx.throw(error);
+            ctx.sendError(error)
+		}
+		
+	},
+	async payResNotify(ctx, next){
+		console.log('----------------小程序微信支付结果通知 /api/order/payResNotify-----------------------');
+		try {
+			let paramData = ctx.request.query
+
+			ctx.send({
+				data: paramData
 			})
 		} catch (error) {
 			ctx.throw(error);
