@@ -8,7 +8,7 @@ const auth = {
 const wx = {
 	wxappid: 'wx2e4f118e527bcf44',
 	mch_id: '1517731521',
-	wxpaykey: 'wwb'
+	wxpaykey: 'wangwenbeiwangwenbeiwangwenbei11'
 }
 
 const log = {
@@ -29,7 +29,8 @@ export default {
     port,
 	auth,
 	server,
-    log,
+	log,
+	wx,
     mongodb: {
         username: 'wwb',
         pwd: 123456,

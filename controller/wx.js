@@ -2,6 +2,7 @@
 import ip from 'ip'
 import conf from '../config'
 import WechatAppletPay from './pay'
+
 export default {
 	async getAccessToken(ctx, next){
 		try {
@@ -36,11 +37,11 @@ export default {
 		try {
 			let paramData = ctx.request.body;
 
-			let WechatAppletPay= new WechatAppletPay(paramData.userInfo)
+			let WechatAppletPay1 = new WechatAppletPay(paramData.userInfo)
 
-			WechatAppletPay.getBrandWCPayParams(paramData.orderInfo, function (data) {
-				console.log(data);
-			})
+			let res = await WechatAppletPay1.getBrandWCPayParams(paramData.orderInfo)
+
+			ctx.send(res)
 		} catch (error) {
 			ctx.throw(error);
             ctx.sendError(error)

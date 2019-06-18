@@ -11,8 +11,9 @@ var uuid = require('uuid');
 // var sql = require('./assets/sql/sql')
 var xml2jsparseString = require('xml2js').parseString;
 // 引入项目的配置信息
-const CONFIG = require('../config')
-var config = CONFIG.wx
+import configm from '../config'
+
+var config = configm.wx
 
 // wechat 支付类 (使用 es6 的语法)
 class WechatAppletPay {
@@ -69,6 +70,7 @@ class WechatAppletPay {
 		return new Promise(function (resolve, reject) {
 			// 获取 sign 参数
 			UnifiedorderParams.sign = that.getSign(UnifiedorderParams);
+
 			var url = 'https://api.mch.weixin.qq.com/pay/unifiedorder';
 			request.post({
 				url: url,
@@ -115,10 +117,12 @@ class WechatAppletPay {
 	 * 微信支付的所有参数
 	 * @param req 请求的资源, 获取必要的数据
 	 */
-	getBrandWCPayParams(obj, callback) {
+	getBrandWCPayParams(obj) {
+		let res = {}
 		var that = this;
 		var prepay_id_promise = that.getPrepayId(obj);
-		prepay_id_promise.then(function (prepay_id) {
+
+		return prepay_id_promise.then(function (prepay_id) {
 			var prepay_id = prepay_id;
 			var wcPayParams = {
 				"appId": config.wxappid, // 微信小程序的APPID
@@ -130,9 +134,8 @@ class WechatAppletPay {
 			};
 			wcPayParams.paySign = that.getSign(wcPayParams); //微信支付签名
 			wcPayParams.order_id = that.order_id; //微信支订单号
-			callback(wcPayParams);
-		}, function (error) {
-			callback(error);
+
+			return wcPayParams
 		});
 	}
 
@@ -145,4 +148,4 @@ class WechatAppletPay {
 
 }
 
-module.exports = WechatAppletPay;
+export default WechatAppletPay
