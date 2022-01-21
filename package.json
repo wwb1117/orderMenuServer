@@ -27,7 +27,7 @@
     "koa-sslify": "^2.1.2",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
-    "log4js": "^3.0.5",
+    "log4js": "^6.4.0",
     "mathjs": "^5.2.2",
     "mongoose": "^5.2.12",
     "pug": "^2.0.0-rc.1",
